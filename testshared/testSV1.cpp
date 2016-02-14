@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SHM_SIZE 1000000
+#define SHM_SIZE 1048576
 
 void* allocMemory(size_t size){
 
@@ -14,7 +14,10 @@ void *ptr = nullptr;
 
 key_t key = ftok("/tmp/mem.temp", 1);
 
-auto id = shmget(key, SHM_SIZE,  IPC_CREAT);
+auto idn = shmget(key, SHM_SIZE, IPC_CREAT);
+shmctl(id, IPC_RMID, NULL);
+
+auto id = shmget(key, SHM_SIZE,  IPC_CREAT | 0644);
 if (id == -1){
 	  perror("error shmget");
 	  return nullptr;
@@ -33,7 +36,7 @@ return ptr;
 }
 int main(int argc, char **argv){
 
-enum {memsiz = 1000000};
+enum {memsiz = 1048576};
 char *ptr = reinterpret_cast<char *>(allocMemory(memsiz));
 if (ptr){
 	std::cout << "pointer is created" << std::endl;
@@ -43,5 +46,6 @@ if (ptr){
 else
 	std::cout << "nullptr" << std::endl;
  
+std::cin.ignore().get();
 return 0;
 }
