@@ -15,7 +15,7 @@ void *ptr = nullptr;
 key_t key = ftok("/tmp/mem.temp", 1);
 
 auto idn = shmget(key, SHM_SIZE, IPC_CREAT);
-shmctl(id, IPC_RMID, NULL);
+shmctl(idn, IPC_RMID, NULL);
 
 auto id = shmget(key, SHM_SIZE,  IPC_CREAT | 0644);
 if (id == -1){
